@@ -1,4 +1,5 @@
-import scaldi.{Module, Injector, Injectable}
+import scaldi.{Module, Injector}
+import scaldi.Injectable._
 
 
 object Hello extends App {
@@ -13,7 +14,7 @@ object Hello extends App {
   hello.sayGreeting
 }
 
-class Hello(implicit inj: Injector) extends Injectable {
+class Hello(implicit inj: Injector) {
   def sayGreeting = {
     val greeter = inject [MessageService]
 
@@ -26,11 +27,10 @@ trait MessageService {
 }
 
 class OfficialMessageService(implicit inj: Injector)
-  extends MessageService with Injectable {
+  extends MessageService {
 
   val officialGreeting =
     inject [String] (identified by "greeting.official")
 
   override def getGreetMessage(name: String) = s"$officialGreeting, $name!"
-    //"impl"
 }
